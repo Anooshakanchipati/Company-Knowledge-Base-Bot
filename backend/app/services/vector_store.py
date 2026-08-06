@@ -1,7 +1,9 @@
 from pathlib import Path
 
 import chromadb
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+from chromadb.utils.embedding_functions import (
+    DefaultEmbeddingFunction,
+)
 
 
 VECTOR_DATABASE_PATH = Path("vector_database")
@@ -11,9 +13,7 @@ client = chromadb.PersistentClient(
     path=str(VECTOR_DATABASE_PATH)
 )
 
-embedding_function = SentenceTransformerEmbeddingFunction(
-    model_name="all-MiniLM-L6-v2"
-)
+embedding_function = DefaultEmbeddingFunction()
 
 document_collection = client.get_or_create_collection(
     name="company_documents",

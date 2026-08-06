@@ -9,6 +9,5 @@ python-multipart
 pypdf
 python-docx
 chromadb
-sentence-transformers
 google-genai
 openai
