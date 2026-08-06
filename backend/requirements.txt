@@ -1,0 +1,14 @@
+fastapi==0.128.8
+uvicorn[standard]
+sqlalchemy
+pydantic[email]
+pwdlib[argon2]
+PyJWT
+python-dotenv
+python-multipart
+pypdf
+python-docx
+chromadb
+sentence-transformers
+google-genai
+openai
