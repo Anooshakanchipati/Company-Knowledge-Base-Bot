@@ -392,7 +392,7 @@ Deployment Links
 
 Live application: https://company-knowledge-base-bot-1.onrender.com
 
-GitHub repository: <add-your-github-repository-url>
+GitHub repository: https://github.com/Anooshakanchipati/Company-Knowledge-Base-Bot.git
 
 Screenshots
 
