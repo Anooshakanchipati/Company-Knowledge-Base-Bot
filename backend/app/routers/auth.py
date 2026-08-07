@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -9,6 +11,7 @@ from app.security import (
     hash_password,
     verify_password,
 )
+
 
 router = APIRouter(
     prefix="/api/auth",
@@ -25,7 +28,7 @@ def register_user(
     user_data: schemas.UserRegister,
     database: Session = Depends(get_database),
 ):
-    normalized_email = user_data.email.lower()
+    normalized_email = user_data.email.strip().lower()
 
     existing_user = (
         database.query(models.User)
@@ -39,11 +42,20 @@ def register_user(
             detail="An account with this email already exists",
         )
 
+    admin_email = os.getenv(
+        "ADMIN_EMAIL",
+        "",
+    ).strip().lower()
+
     new_user = models.User(
         name=user_data.name.strip(),
         email=normalized_email,
         password=hash_password(user_data.password),
-        role="user",
+        role=(
+            "admin"
+            if normalized_email == admin_email
+            else "user"
+        ),
     )
 
     database.add(new_user)
@@ -61,7 +73,7 @@ def login_user(
     login_data: schemas.UserLogin,
     database: Session = Depends(get_database),
 ):
-    normalized_email = login_data.email.lower()
+    normalized_email = login_data.email.strip().lower()
 
     user = (
         database.query(models.User)
@@ -78,6 +90,18 @@ def login_user(
             detail="Invalid email or password",
         )
 
+    # Make the configured account an admin.
+    # This also updates an account registered before ADMIN_EMAIL was added.
+    admin_email = os.getenv(
+        "ADMIN_EMAIL",
+        "",
+    ).strip().lower()
+
+    if user.email == admin_email and user.role != "admin":
+        user.role = "admin"
+        database.commit()
+        database.refresh(user)
+
     access_token = create_access_token(
         user_id=user.id,
         email=user.email,
@@ -89,6 +113,8 @@ def login_user(
         "token_type": "bearer",
         "user": user,
     }
+
+
 @router.get(
     "/me",
     response_model=schemas.UserResponse,
