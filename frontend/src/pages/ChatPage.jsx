@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import {
   askQuestion,
   deleteConversation,
@@ -307,8 +308,10 @@ const [isAdmin, setIsAdmin] = useState(false);
               </div>
 
               <div className="message-content">
-                {message.content}
-              </div>
+  <ReactMarkdown>
+    {message.content}
+  </ReactMarkdown>
+</div>
 
               {message.modelProvider && (
                 <div className="model-provider">

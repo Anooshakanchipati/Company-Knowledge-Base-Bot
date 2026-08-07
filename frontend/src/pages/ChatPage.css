@@ -476,3 +476,32 @@ textarea {
     margin-bottom: 14px;
   }
 }
+.message-content {
+  line-height: 1.7;
+  color: #17152b;
+  overflow-wrap: anywhere;
+}
+
+.message-content p {
+  margin: 0 0 12px;
+}
+
+.message-content ul,
+.message-content ol {
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.message-content li {
+  margin-bottom: 8px;
+}
+
+.message-content strong {
+  font-weight: 700;
+  color: #24134f;
+}
+
+.message-content p:last-child,
+.message-content li:last-child {
+  margin-bottom: 0;
+}
